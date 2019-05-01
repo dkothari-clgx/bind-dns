@@ -1,0 +1,35 @@
+- name: Install Bind9
+  become: true
+  apt:
+    name: bind9
+
+- name: Update Bind9 file to be IP4 only
+  become: true
+  template:
+    src: templates/bind9.j2
+    dest: /etc/default/bind9
+    owner: root
+    group: root
+    mode: "u=rw,g=r,o=r"
+
+- name: Allow only trusted IPS to DNS Resolve
+  become: true
+  vars:
+    acl_cidrs:
+      - 192.168.1.0/24
+  template:
+    src: templates/named.conf.options.j2
+    dest: /etc/bind/named.conf.options
+    owner: root
+    group: root
+    mode: "u=rw,g=r,o=r"
+
+- name: Create Zones
+  become: true
+  template:
+    src: templates/named.conf.local.j2
+    dest: /etc/bind/named.conf.local
+    owner: root
+    group: root
+    mode: "u=rw,g=r,o=r"
+
