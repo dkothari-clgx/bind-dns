@@ -33,3 +33,14 @@
     group: root
     mode: "u=rw,g=r,o=r"
 
+
+#Create zones and reverse-zones here
+
+#Run Check Configuration
+
+# Restart Bind
+- name: Restart Bind9 Configuration
+  become: true
+  service:
+    name: bind9
+    state: restarted
